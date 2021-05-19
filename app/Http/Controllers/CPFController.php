@@ -40,16 +40,21 @@ class CPFController extends Controller
 
         $primeirosDigitos = $this->primeirosDigitos();
         $cpf = $this->gerarNumerosDeValidacao($primeirosDigitos);
-        return response()->json(implode($cpf));
+        return response()->json(implode($cpf), 200);
     }
 
 
     public function validaCPF($cpf)
     {
+
+        if(strlen($cpf) !== 11){
+            return response()->json('Tamanho Inválido', 404);
+        }
+
         $primeirosDigitos = str_split($cpf);
         $primeirosDigitos = array_slice($primeirosDigitos, 0, -2);
         $validado = $this->gerarNumerosDeValidacao($primeirosDigitos);
 
-        return response()->json(implode($validado) == $cpf ? true : false);
+        return response()->json(implode($validado) == $cpf ? true : false, 200);
     }
 }
