@@ -46,14 +46,17 @@ class PISController extends Controller
     public function validaPIS($pis){
 
         if(strlen($pis) !== 11){
-            return response()->json('Tamanho Inválido', 404);
+            return response()->json('Tamanho Inválido', 400);
         }
 
         $primeirosDigitos = str_split($pis);
         $primeirosDigitos = array_slice($primeirosDigitos, 0, -1);
         $validado = $this->geraDigitoVerificador($primeirosDigitos);
 
-        return response()->json(implode($validado) == $pis ? true : false, 200);
+        if(implode($validado) == $pis)
+            return response()->json(true, 200);
+
+        return response()->json(false, 400);
 
 
     }

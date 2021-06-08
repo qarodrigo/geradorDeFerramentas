@@ -47,14 +47,31 @@ class CPFController extends Controller
     public function validaCPF($cpf)
     {
 
+        if( strcmp($cpf, '11111111111') ||
+            strcmp($cpf, '22222222222') || 
+            strcmp($cpf, '33333333333') || 
+            strcmp($cpf, '44444444444') || 
+            strcmp($cpf, '55555555555') || 
+            strcmp($cpf, '66666666666') || 
+            strcmp($cpf, '77777777777') || 
+            strcmp($cpf, '88888888888') || 
+            strcmp($cpf, '99999999999'))
+
+            return response()->json(false, 400);
+
+
         if(strlen($cpf) !== 11){
-            return response()->json('Tamanho Inválido', 404);
+            return response()->json('Tamanho Inválido', 400);
         }
 
         $primeirosDigitos = str_split($cpf);
         $primeirosDigitos = array_slice($primeirosDigitos, 0, -2);
         $validado = $this->gerarNumerosDeValidacao($primeirosDigitos);
 
-        return response()->json(implode($validado) == $cpf ? true : false, 200);
+        if(implode($validado) == $cpf)
+            return response()->json(true, 200);
+        
+
+        return response()->json(false, 400);
     }
 }
